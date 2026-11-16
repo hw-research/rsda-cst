@@ -1,0 +1,81 @@
+# First-paper LoveDA experiment: Rural -> Urban.
+# RSDA-CST self-training with optional ADAF, GIR, and RS-AUG ablations.
+
+ADAF_TEMP_SCHEDULE_ENABLED: False
+PSEUDO_THRESHOLD_SCHEDULE_ENABLED: False
+USE_SCHEDULER: False
+GRAD_CLIP_NORM: null
+
+DATASET:
+  ROOT: "data"
+  USE_CLASS_WEIGHTS: True
+  CLASS_WEIGHTS: [1.0, 1.0, 1.0, 1.0, 1.3, 1.0, 1.0]
+  CROP_SIZE: [640, 640]
+  VAL_CROP: False
+  RND_CROP: True
+  RND_HFLIP: True
+  GUIDED_HFLIP: True
+  SCALE_FROM: 1.0
+  SCALE_TO: 1.0
+  RND_ZOOM: [1.0, 1.5]
+  TARGET_SCALE: [1.0, 1.0]
+  CHANNEL_ADAPT: False
+
+  # LoveDA has no NIR band. RS-AUG remains off unless selected by the launcher.
+  USE_REMOTE_AUG: False
+  REMOTE_HAS_NIR: False
+  RND_BLUR: True
+  RND_JITTER: 0.4
+  RND_GREYSCALE: 0.2
+
+TRAIN:
+  TASK: "train_loveda_rural"
+  TARGET: "train_loveda_urban"
+  TARGET_ONLY: False
+  BATCH_SIZE: 8
+  NUM_GROUPS: 2
+  GROUP_SIZE: 4
+  SOURCE_EPOCHS: 25
+  ADAPT_EPOCHS: 35
+
+MODEL:
+  ARCH: "deeplabv3plus_resnet50"
+  BACKBONE: "resnet50"
+  INIT_MODEL: "models/pretrained/resnet50-19c8e357.pth"
+  OUTPUT_STRIDE: 8
+  ASPP_RATES: [6, 12, 18]
+  ABN_TARGET_BN: True
+
+  LR: 0.00025
+  LR_TARGET: 1.5
+  OPT: "SGD"
+  OPT_NESTEROV: True
+  WEIGHT_DECAY: 0.0003
+  BASELINE: False
+  Target_Freeze_BN: False
+
+  LOSS: "focal_ce_conf"
+  CONF_POOL_ON: True
+  # Select avg_pool, minentropy_pool, or enable USE_ADAF for ADAF.
+  CONF_POOL: "minentropy_pool"
+  THRESHOLD_BETA: 0.0001
+  RUN_CONF_UPPER: 0.5
+  RUN_CONF_LOWER: 0.2
+  CONF_DISCOUNT: True
+  FOCAL_P: 3
+
+  USE_ADAF: False
+  ADAF_TEMP: 1.0
+  ADAF_TEMP_MIN: 0.4
+  USE_GIR: False
+  GIR_BOUNDARY_WEIGHT: 0.2
+  GIR_DICE_WEIGHT: 0.2
+
+LOG:
+  ITER_VAL: 2
+  ITER_TRAIN: 100
+  ITER_TARGET: 100
+  ITER_DISPLAY: 50
+
+TB:
+  IM_SIZE: [256, 256]

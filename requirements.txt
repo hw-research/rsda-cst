@@ -1,0 +1,21 @@
+# Core dependencies for RSDA-CST training and inference.
+# Install a CUDA-compatible PyTorch build from https://pytorch.org/get-started/locally/
+# before or together with this file if you need GPU acceleration.
+
+# The implementation keeps compatibility with the original DA-SAC-era
+# environment; install the CUDA build that matches the local driver.
+torch>=1.8.0
+torchvision>=0.9.0
+numpy>=1.21
+Pillow>=9.0
+imageio>=2.19
+PyYAML>=6.0
+tqdm>=4.64
+matplotlib>=3.5
+scikit-image>=0.19
+scikit-learn>=1.0
+tensorboard>=2.10
+setproctitle>=1.3
+packaging>=21.0
+future>=0.18
+six>=1.16

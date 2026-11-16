@@ -1,0 +1,83 @@
+# Vaihingen IRRG -> Potsdam RGB
+# Standalone DA-SAC teacher-student configuration.
+
+ADAF_TEMP_SCHEDULE_ENABLED: False
+PSEUDO_THRESHOLD_SCHEDULE_ENABLED: False
+USE_SCHEDULER: False
+GRAD_CLIP_NORM: null
+
+DATASET:
+  ROOT: "data"
+  USE_CLASS_WEIGHTS: True
+  CLASS_WEIGHTS: [1.0, 1.0, 1.0, 1.5, 1.0, 1.5]
+  CROP_SIZE: [512, 512]
+  VAL_CROP: False
+  RND_CROP: True
+  RND_HFLIP: True
+  GUIDED_HFLIP: True
+  SRC_RND_JITTER: 0.0
+  SCALE_FROM: 0.8
+  SCALE_TO: 1.3
+  RND_ZOOM: [0.8, 1.3]
+  TARGET_SCALE: [1.0, 1.0]
+  # Keep native Vaihingen bands in both stages of the fixed experiment protocol.
+  CHANNEL_ADAPT: True
+
+  # The target is Potsdam RGB, so RS-AUG must not treat any band as NIR.
+  USE_REMOTE_AUG: False
+  REMOTE_HAS_NIR: False
+  RND_BLUR: True
+  RND_JITTER: 0.4
+  RND_GREYSCALE: 0.2
+
+TRAIN:
+  TASK: "train_vaihingen"
+  TARGET: "train_potsdam_rgb"
+  TARGET_ONLY: False
+  BATCH_SIZE: 8
+  NUM_GROUPS: 2
+  GROUP_SIZE: 4
+  SOURCE_EPOCHS: 20
+  ADAPT_EPOCHS: 30
+
+MODEL:
+  ARCH: "deeplabv3plus_resnet50"
+  BACKBONE: "resnet50"
+  INIT_MODEL: "models/pretrained/resnet50-19c8e357.pth"
+  OUTPUT_STRIDE: 8
+  ASPP_RATES: [6, 12, 18]
+  ABN_TARGET_BN: True
+
+  LR: 0.00025
+  LR_TARGET: 1.0
+  OPT: "SGD"
+  OPT_NESTEROV: True
+  WEIGHT_DECAY: 0.0003
+  BASELINE: False
+  Target_Freeze_BN: False
+  LOSS: "focal_ce_conf"
+  CONF_POOL_ON: True
+  # Select avg_pool, minentropy_pool, or enable USE_ADAF for ADAF.
+  CONF_POOL: "minentropy_pool"
+  RUN_CONF_UPPER: 0.5
+  RUN_CONF_LOWER: 0.2
+  CONF_DISCOUNT: True
+  FOCAL_P: 3
+
+  USE_ADAF: False
+  ADAF_TEMP: 1.0
+  ADAF_TEMP_MIN: 0.5
+  USE_GIR: False
+  GIR_BOUNDARY_WEIGHT: 0.2
+  GIR_DICE_WEIGHT: 0.2
+  # Independent second mechanism; launch mode can override this switch.
+
+
+LOG:
+  ITER_VAL: 2
+  ITER_TRAIN: 100
+  ITER_TARGET: 100
+  ITER_DISPLAY: 50
+
+TB:
+  IM_SIZE: [256, 256]
