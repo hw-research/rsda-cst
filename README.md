@@ -33,5 +33,3 @@ bash launch/infer.sh virrg_pirrg path/to/checkpoint.pth
 ```
 
 Adaptation modes: `baseline`, `adaf`, `gir`, `adaf_gir`, `rsaug`, `rsaug_adaf`, `rsaug_gir`, and `rsaug_adaf_gir`. The six task-specific YAML files are in `configs/`. Use `python tools/check_project.py` to check configuration and launcher consistency.
-
-Training datasets, split manifests, pretrained weights, logs, and model checkpoints are not redistributed in this repository.
