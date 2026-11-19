@@ -70,10 +70,12 @@ MODEL:
   ADAF_TEMP: 1.5
   ADAF_TEMP_MIN: 0.5
   USE_GIR: False
-  GIR_BOUNDARY_WEIGHT: 0.3
-  GIR_DICE_WEIGHT: 0.3
+  GIR_BOUNDARY_WEIGHT: 0.2
+  GIR_DICE_WEIGHT: 0.2
   # Independent second mechanism; launch mode can override this switch.
-
+  MOMENTUM: 0.9
+  NET_MOMENTUM: 0.995
+  NET_MOMENTUM_ITER: 100
 
 LOG:
 

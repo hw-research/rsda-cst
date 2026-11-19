@@ -48,7 +48,7 @@ MODEL:
   ABN_TARGET_BN: True
   Target_Freeze_BN: False
   LR: 0.00025
-  LR_TARGET: 1.0
+  LR_TARGET: 1.5
   OPT: "SGD"
   OPT_NESTEROV: True
   WEIGHT_DECAY: 0.0003
@@ -65,9 +65,12 @@ MODEL:
   ADAF_TEMP: 1.2
   ADAF_TEMP_MIN: 0.5
   USE_GIR: False
-  GIR_DICE_WEIGHT: 0.5
-  GIR_BOUNDARY_WEIGHT: 0.5
+  GIR_DICE_WEIGHT: 0.3
+  GIR_BOUNDARY_WEIGHT: 0.3
     # Independent second mechanism; launch mode can override this switch.
+  MOMENTUM: 0.9
+  NET_MOMENTUM: 0.995
+  NET_MOMENTUM_ITER: 100
 
 LOG:
   ITER_VAL: 2
